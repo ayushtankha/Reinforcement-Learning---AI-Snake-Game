@@ -8,11 +8,15 @@ class Linear_QNet(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
-        self.linear2 = nn.Linear(hidden_size, output_size)
+        self.linear2 = nn.Linear(hidden_size, hidden_size)  # Additional hidden layer
+        self.linear3 = nn.Linear(hidden_size, hidden_size)  # Another additional hidden layer
+        self.linear4 = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = self.linear2(x)
+        x = F.relu(self.linear1(x))  # ReLU activation for the first hidden layer
+        x = F.relu(self.linear2(x))  # ReLU activation for the second hidden layer
+        x = F.relu(self.linear3(x))  # ReLU activation for the third hidden layer
+        x = self.linear4(x)  # No activation here, raw scores are used
         return x
 
     def save(self, file_name='model.pth'):
